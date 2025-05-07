@@ -8,27 +8,27 @@ const queries = {
   irelandMusic: {
     countryCode: 'IE',
     classificationName: 'music',
-    size: 200
+    size: 250
   },
   irelandFestivals: {
     countryCode: 'IE',
     classificationName: 'festival',
-    size: 100
+    size: 200
   },
   ukFestivals: {
     countryCode: 'GB',
     classificationName: 'festival',
-    size: 100
+    size: 200
   },
   germanyFestivals: {
     countryCode: 'DE',
     classificationName: 'festival',
-    size: 100
+    size: 200
   },
   franceFestivals: {
     countryCode: 'FR',
     classificationName: 'festival',
-    size: 100
+    size: 200
   }
 };
 
@@ -77,7 +77,7 @@ export async function getEvents(params = {}) {
   return fetchTicketmasterEvents({
     countryCode: 'IE',
     classificationName: 'music',
-    size: 50,
+    size: 250,
     ...params
   });
 }
@@ -87,7 +87,7 @@ export async function getVenues() {
   const query = new URLSearchParams({
     apikey: TICKETMASTER_KEY,
     countryCode: 'IE',
-    size: 100
+    size: 200
   }).toString();
 
   const response = await fetch(`${BASE_URL}/venues.json?${query}`);
