@@ -1,25 +1,50 @@
-import express from 'express';
-import { pool } from '../services/database.js';
-
+const express = require('express');
+const { Event, Venue } = require('../models');
 const router = express.Router();
 
-router.get('/:id', async (req, res) => {
+// Get all concerts in Ireland/Northern Ireland
+router.get('/concerts/ireland', async (req, res) => {
   try {
-    const { id } = req.params;
-    const { rows } = await pool.query(
-      `SELECT * FROM events WHERE id = $1`,
-      [id]
-    );
-    
-    if (rows.length === 0) {
-      return res.status(404).json({ error: 'Event not found' });
-    }
-    
-    res.json(rows[0]);
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Failed to fetch event' });
+    const events = await Event.findAll({
+      include: [{
+        model: Venue,
+        where: {
+          country: ['Ireland', 'Northern Ireland']
+        }
+      }],
+      where: {
+        classification: { [Op.ne]: 'Festival' }
+      }
+    });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
+// Get festivals in target countries
+router.get('/festivals/europe', async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      include: [{
+        model: Venue,
+        where: {
+          country: [
+            'Ireland', 'Northern Ireland', 'United Kingdom',
+            'France', 'Netherlands', 'Germany', 'Spain'
+          ]
+        }
+      }],
+      where: {
+        classification: 'Festival'
+      }
+    });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// Make sure this is the LAST line in the file:
 export default router;
