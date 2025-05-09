@@ -1,8 +1,13 @@
 import fetch from 'node-fetch';
+const axios = require('axios');
+
+
 
 const TICKETMASTER_KEY = process.env.TICKETMASTER_KEY;
 const EVENTBRITE_KEY = process.env.EVENTBRITE_KEY;
 const BASE_URL = 'https://app.ticketmaster.com/discovery/v2';
+
+
 
 const queries = {
   irelandMusic: {
@@ -31,6 +36,16 @@ const queries = {
     size: 200
   }
 };
+
+
+module.exports = {
+  fetchAllEvents: async () => {
+    const response = await axios.get('https://api.example.com/events');
+    return response.data;
+  }
+};
+
+
 
 export async function fetchTicketmasterEvents(queryName) {
   const query = new URLSearchParams({

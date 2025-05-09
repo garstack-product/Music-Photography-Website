@@ -1,8 +1,17 @@
-import cron from 'node-cron';
-import { fetchAllEvents } from './api.js';
-import { storeEvents } from './database.js';
+const cron = require('node-cron');
+const { fetchAllEvents } = require('./api');
 
-
+module.exports = function initScheduler() {
+  cron.schedule('*/5 * * * *', async () => { // Runs every 5 minutes
+    try {
+      console.log('Running event sync...');
+      await fetchAllEvents();
+      console.log('Sync completed');
+    } catch (error) {
+      console.error('Sync failed:', error);
+    }
+  });
+};
 
 // Add this date formatting utility function
 function formatDate(dateInput) {
